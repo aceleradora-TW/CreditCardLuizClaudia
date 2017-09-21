@@ -1,13 +1,13 @@
-//Função que válida os cartões em tamanho e começo
+//Função que válida os cartões em tamanho  e começo
 function tipoDoCartao(numeroDoCartao){
-  let tamanho = numeroDoCartao.length;
-  if (eAmex(numeroDoCartao, tamanho)) {
+  let tamanhoDoNumeroDoCartao = numeroDoCartao.length;
+  if (eAmex(numeroDoCartao, tamanhoDoNumeroDoCartao)) {
     return 'Amex';
-  } else if (eVisa(numeroDoCartao, tamanho)) {
+  } else if (eVisa(numeroDoCartao, tamanhoDoNumeroDoCartao)) {
     return 'Visa';
-  } else if (eDiscover(numeroDoCartao, tamanho)) {
+  } else if (eDiscover(numeroDoCartao, tamanhoDoNumeroDoCartao)) {
     return 'Discover';
-  } else if (eMastercard(numeroDoCartao, tamanho)) {
+  } else if (eMastercard(numeroDoCartao, tamanhoDoNumeroDoCartao)) {
     return 'Mastercard';
   } else {
     return false;
@@ -15,31 +15,27 @@ function tipoDoCartao(numeroDoCartao){
 }
 
 //validação para o cartão Amex
-function eAmex(numeroDoCartao, tamanho){
-  if(tamanho === 15 && (numeroDoCartao.slice(0,2) === '37') || (numeroDoCartao.slice(0,2) === '34')){
-    return true;
-  }
+function eAmex(numeroDoCartao, tamanhoDoNumeroDoCartao){
+  return (tamanhoDoNumeroDoCartao === 15 &&
+  (numeroDoCartao.slice(0,2) === '37') || (numeroDoCartao.slice(0,2) === '34')) ? true : false;
 }
 
 //Validação para o cartão Visa
-function eVisa(numeroDoCartao, tamanho){
-  if((tamanho === 13  || tamanho === 16 ) && (numeroDoCartao.slice(0,1) === '4')){
-    return true;
-  }
+function eVisa(numeroDoCartao, tamanhoDoNumeroDoCartao){
+  return ((tamanhoDoNumeroDoCartao === 13  || tamanhoDoNumeroDoCartao === 16 ) &&
+  (numeroDoCartao.slice(0,1) === '4')) ? true : false;
 }
 
 //Validação para o cartão Discover
-function eDiscover(numeroDoCartao, tamanho){
-  if((tamanho === 16) && numeroDoCartao.slice(0,4) === '6011'){
-    return true;
-  }
+function eDiscover(numeroDoCartao, tamanhoDoNumeroDoCartao){
+  return ((tamanhoDoNumeroDoCartao === 16) &&
+  numeroDoCartao.slice(0,4) === '6011') ? true : false;
 }
 
 //Validação para o cartão Mastercard
-function eMastercard(numeroDoCartao, tamanho){
-  if((tamanho === 16) && numeroDoCartao.slice(0,2) >= 51 && numeroDoCartao.slice(0,2) <= 55){
-    return true;
-  }
+function eMastercard(numeroDoCartao, tamanhoDoNumeroDoCartao){
+  return ((tamanhoDoNumeroDoCartao === 16) &&
+  numeroDoCartao.slice(0,2) >= 51 && numeroDoCartao.slice(0,2) <= 55) ? true : false;
 }
 
 function reverseString(str) {
@@ -48,27 +44,27 @@ function reverseString(str) {
 
 //função que valida o algoritmo de Luhn
 function validaCartao(numeroDoCartao){
-  numeroDoCartao = numeroDoCartao.split(' ').join('');
+  let numeroDoCartaoSemEspaco = numeroDoCartao.split(' ').join('');
 
-  if (tipoDoCartao(numeroDoCartao)) {
-    numeroCartaoInvertido = reverseString(numeroDoCartao);
+  if (tipoDoCartao(numeroDoCartaoSemEspaco)) {
+    let numeroCartaoInvertido = reverseString(numeroDoCartaoSemEspaco);
 
-    let soma = 0;
-    let dobra = 0;
+    let somaDosNumerosDoCartao = 0;
+    let numeroDoCartaoDobrado = 0;
     for(let i = 0; i < numeroCartaoInvertido.length; i++){
       if(i % 2 !== 0){
-        dobra = numeroCartaoInvertido.charAt(i) * 2;
-        soma += dobra;
+        numeroDoCartaoDobrado = numeroCartaoInvertido.charAt(i) * 2;
+        somaDosNumerosDoCartao += numeroDoCartaoDobrado;
         //verifica se o número dobrado é maior que 9
-        if (dobra > 9) {
-          soma -= 9;
+        if (numeroDoCartaoDobrado > 9) {
+          somaDosNumerosDoCartao -= 9;
         }
       } else {
-        soma += parseInt(numeroCartaoInvertido.charAt(i));
+        somaDosNumerosDoCartao += parseInt(numeroCartaoInvertido.charAt(i));
       }
     }
-    if (soma % 10 === 0) {
-      return(tipoDoCartao(numeroDoCartao) + ", cartão válido.")
+    if (somaDosNumerosDoCartao % 10 === 0) {
+      return(tipoDoCartao(numeroDoCartaoSemEspaco) + ", cartão válido.")
     }
   }
   return "Cartão inválido."
